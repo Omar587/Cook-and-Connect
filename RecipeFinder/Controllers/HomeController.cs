@@ -15,7 +15,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return RedirectToAction("Index", "Recipe");
+        return View();
     }
     
 
