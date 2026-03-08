@@ -1,1568 +1,393 @@
 ﻿@{
-    ViewData["Title"] = "Home — RecipeFinder";
+    ViewData["Title"] = "Artisan Kitchen — RecipeFinder";
 }
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
-/* ─── RESET & BASE ─────────────────────────────────────────── */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-    font-family: 'DM Sans', system-ui, sans-serif;
-    background: #f9f5ef;
-    color: #1a1a1a;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-}
-
-/* ─── UTILITY ──────────────────────────────────────────────── */
-.eyebrow {
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #e85d26;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-.eyebrow::before {
-    content: '';
-    display: block;
-    width: 28px;
-    height: 1px;
-    background: #e85d26;
-    flex-shrink: 0;
-}
-
-/* ─── HERO ─────────────────────────────────────────────────── */
-
-.hero {
-    position: relative;
-    height: 100svh;
-    min-height: 640px;
-    max-height: 920px;
-    /* ADD these two: */
-    max-width: 1480px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 52% 48%;
-    overflow: hidden;
-}
-
-.hero-left {
-    position: relative;
-    z-index: 2;
-    background: #f9f5ef;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    /* CHANGE padding to match nav's 2rem left edge */
-    padding: 2.5rem 3.5rem 2.5rem 2rem;
-}
-
-/* Top bar */
-.hero-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    opacity: 0;
-    animation: riseIn 0.5s 0.05s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-.hero-issue-tag {
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #8a7f74;
-    padding: 0.28rem 0.75rem;
-    border: 1px solid #c5bdb4;
-    border-radius: 2px;
-}
-.hero-issue-date {
-    font-size: 0.62rem;
-    color: #8a7f74;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-/* Centre block */
-.hero-center {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 1.5rem 0;
-}
-
-.hero-kicker {
-    opacity: 0;
-    animation: riseIn 0.5s 0.15s cubic-bezier(0.4,0,0.2,1) forwards;
-    margin-bottom: 1rem;
-}
-
-.hero-headline {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(3.4rem, 4.8vw, 6rem);
-    font-weight: 300;
-    line-height: 1.0;
-    letter-spacing: -0.03em;
-    color: #1a1a1a;
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: riseIn 0.6s 0.25s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-.hero-headline em {
-    font-style: italic;
-    color: #e85d26;
-}
-
-.hero-sub {
-    font-size: 0.9rem;
-    line-height: 1.72;
-    color: #8a7f74;
-    max-width: 360px;
-    margin-bottom: 2rem;
-    font-weight: 300;
-    opacity: 0;
-    animation: riseIn 0.5s 0.38s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-
-.hero-cta-row {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    opacity: 0;
-    animation: riseIn 0.5s 0.48s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.65rem;
-    padding: 1rem 2rem;
-    background: #1a1a1a;
-    color: #ffffff;
-    text-decoration: none;
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    transition: background 0.25s, transform 0.2s;
-}
-.btn-primary:hover {
-    background: #e85d26;
-    transform: translateY(-2px);
-}
-.btn-primary svg { width: 14px; height: 14px; stroke: currentColor; fill: none; transition: transform 0.2s; }
-.btn-primary:hover svg { transform: translateX(4px); }
-
-.btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: #3a3530;
-    text-decoration: none;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid #c5bdb4;
-    padding-bottom: 2px;
-    transition: color 0.2s, border-color 0.2s;
-}
-.btn-ghost:hover { color: #e85d26; border-color: #e85d26; }
-
-.hero-stats {
-    display: flex;
-    gap: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e8ddd0;
-    opacity: 0;
-    animation: riseIn 0.5s 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-.stat-num {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 2rem;
-    font-weight: 300;
-    line-height: 1;
-    color: #1a1a1a;
-    display: block;
-}
-.stat-label {
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #8a7f74;
-    margin-top: 0.3rem;
-    display: block;
-}
-
-/* Right image mosaic */
-.hero-right {
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    animation: fadeIn 1s 0.2s ease forwards;
-}
-
-.hero-mosaic {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 2px;
-}
-
-.mosaic-cell {
-    overflow: hidden;
-    position: relative;
-}
-.mosaic-cell img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 8s ease;
-    filter: brightness(0.88) saturate(1.05);
-}
-.mosaic-cell:hover img { transform: scale(1.04); }
-.mosaic-cell:first-child { grid-row: 1 / 3; }
-
-.mosaic-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(232,93,38,0.08), transparent 60%);
-    pointer-events: none;
-}
-
-
-/* Vertical marquee ticker on hero edge */
-.hero-ticker {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 2rem;
-    background: #e85d26;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    overflow: hidden;
-}
-.ticker-text {
-    writing-mode: vertical-rl;
-    font-size: 0.58rem;
-    font-weight: 700;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.75);
-    white-space: nowrap;
-    animation: scrollTicker 12s linear infinite;
-}
-@@keyframes scrollTicker {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(-100%); }
-}
-
-
-/* ─── MARQUEE STRIP ────────────────────────────────────────── */
-.marquee-strip {
-    max-width: 1480px;
-    margin: 0 auto;
-    background: #1a1a1a;
-    padding: 0.9rem 0;
-    overflow: hidden;
-    position: relative;
-    border-radius: 0 0 4px 4px;
-}
-.marquee-track {
-    display: flex;
-    gap: 0;
-    animation: marqueeScroll 28s linear infinite;
-    width: max-content;
-}
-.marquee-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 1.25rem;
-    padding: 0 2rem;
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
-    white-space: nowrap;
-}
-.marquee-item .dot {
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: #e85d26;
-    flex-shrink: 0;
-}
-@@keyframes marqueeScroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-}
-
-/* ─── FEATURED SECTION ─────────────────────────────────────── */
-.section {
-    max-width: 1480px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.section-row {
-    padding: 5rem 0 4rem;
-}
-
-.section-head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem;
-    margin-bottom: 2.75rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #c5bdb4;
-}
-
-.section-head-left {}
-
-.section-title-block {
-    margin-top: 0.75rem;
-}
-
-.section-title-block h2 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(2rem, 3.5vw, 3.2rem);
-    font-weight: 300;
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-    color: #1a1a1a;
-}
-.section-title-block h2 em {
-    font-style: italic;
-    color: #e85d26;
-}
-
-.section-see-all {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #8a7f74;
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding-bottom: 2px;
-    border-bottom: 1px solid #c5bdb4;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-.section-see-all:hover { color: #e85d26; border-color: #e85d26; }
-.section-see-all svg { width: 13px; height: 13px; stroke: currentColor; fill: none; transition: transform 0.2s; }
-.section-see-all:hover svg { transform: translateX(3px); }
-
-/* ─── RECIPE CARDS ─────────────────────────────────────────── */
-.recipe-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-}
-
-.r-card {
-    background: #ffffff;
-    border-radius: 3px;
-    overflow: hidden;
-    border: 1px solid rgba(197,189,180,0.4);
-    transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1), box-shadow 0.3s ease, border-color 0.3s;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-}
-.r-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 24px 56px rgba(26,26,26,0.1), 0 4px 16px rgba(232,93,38,0.1);
-    border-color: rgba(232,93,38,0.25);
-}
-
-.r-card-img {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-    background: #f0e9dc;
-}
-.r-card-img img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
-    display: block;
-}
-.r-card:hover .r-card-img img { transform: scale(1.07); }
-
-.r-badge {
-    position: absolute;
-    top: 0.85rem; left: 0.85rem;
-    padding: 0.28rem 0.7rem;
-    border-radius: 2px;
-    font-size: 0.63rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-.badge-easy   { background: rgba(255,255,255,0.93); color: #2a7d46; }
-.badge-medium { background: rgba(255,255,255,0.93); color: #b87318; }
-.badge-hard   { background: rgba(255,255,255,0.93); color: #b83230; }
-
-.r-cuisine {
-    position: absolute;
-    bottom: 0.85rem; right: 0.85rem;
-    padding: 0.28rem 0.7rem;
-    background: rgba(26,26,26,0.78);
-    color: rgba(255,255,255,0.88);
-    border-radius: 2px;
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    backdrop-filter: blur(6px);
-}
-
-.r-body {
-    padding: 1.2rem 1.25rem 1.3rem;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.r-name {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    line-height: 1.2;
-    color: #1a1a1a;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.01em;
-    transition: color 0.2s;
-}
-.r-card:hover .r-name { color: #e85d26; }
-
-.r-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.76rem;
-    color: #8a7f74;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
-.r-meta-sep { color: #c5bdb4; }
-
-.r-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    margin-top: auto;
-    padding-top: 0.85rem;
-    border-top: 1px solid #f0e9dc;
-}
-.r-stars { color: #e85d26; font-size: 0.72rem; letter-spacing: 0.05em; }
-.r-rating-num { font-size: 0.78rem; font-weight: 600; color: #3a3530; }
-.r-rating-count { font-size: 0.72rem; color: #8a7f74; }
-
-/* ─── EDITORIAL SPLIT ──────────────────────────────────────── */
-.editorial-split {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 0;
-    background: #1a1a1a;
-    overflow: hidden;
-    border-radius: 4px;
-    margin: 0 0 5rem;
-}
-
-.ed-image-side {
-    position: relative;
-    min-height: 520px;
-    overflow: hidden;
-}
-.ed-image-side img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center;
-    filter: brightness(0.75) saturate(1.1);
-    transition: transform 7s ease;
-}
-.ed-image-side:hover img { transform: scale(1.04); }
-.ed-image-gradient {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, transparent 50%, rgba(26,26,26,0.9) 100%);
-}
-
-.ed-content-side {
-    padding: 4rem 3.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.ed-label {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: #e85d26;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-.ed-label::before { content: ''; display: block; width: 24px; height: 1px; background: #e85d26; }
-
-.ed-headline {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(2rem, 2.5vw, 2.8rem);
-    font-weight: 300;
-    line-height: 1.1;
-    color: #ffffff;
-    margin-bottom: 1.25rem;
-    letter-spacing: -0.02em;
-}
-.ed-headline em { font-style: italic; color: #e85d26; }
-
-.ed-body {
-    font-size: 0.92rem;
-    line-height: 1.75;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 2rem;
-    font-weight: 300;
-    max-width: 380px;
-}
-
-.ed-forum-preview {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    margin-bottom: 2rem;
-}
-
-.ed-forum-thread {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: rgba(255,255,255,0.05);
-    border-radius: 3px;
-    border: 1px solid rgba(255,255,255,0.08);
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-    text-decoration: none;
-}
-.ed-forum-thread:hover {
-    background: rgba(255,255,255,0.09);
-    border-color: rgba(232,93,38,0.3);
-}
-
-.thread-avatar {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: #e85d26;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #ffffff;
-}
-
-.thread-info {}
-.thread-title {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: rgba(255,255,255,0.85);
-    line-height: 1.3;
-    margin-bottom: 0.3rem;
-}
-.thread-meta {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.35);
-    display: flex;
-    gap: 0.75rem;
-}
-.thread-hot {
-    color: #e85d26;
-    font-weight: 600;
-}
-
-/* ─── CUISINES GRID ────────────────────────────────────────── */
-.cuisines-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1rem;
-}
-
-.cuisine-card {
-    position: relative;
-    height: 160px;
-    border-radius: 3px;
-    overflow: hidden;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-}
-.cuisine-card:hover .cuisine-img { transform: scale(1.08); }
-.cuisine-card:hover .cuisine-overlay { opacity: 0.75; }
-
-.cuisine-img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
-    filter: brightness(0.7) saturate(1.1);
-}
-.cuisine-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(26,26,26,0.92) 0%, rgba(26,26,26,0.1) 60%);
-    transition: opacity 0.3s;
-}
-.cuisine-label {
-    position: absolute;
-    bottom: 0.9rem;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #ffffff;
-    letter-spacing: 0.02em;
-}
-.cuisine-count {
-    display: block;
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 0.62rem;
-    font-weight: 400;
-    color: rgba(255,255,255,0.55);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-top: 0.2rem;
-}
-
-/* ─── COMMUNITY SECTION ────────────────────────────────────── */
-.community-band {
-    background: #f0e9dc;
-    border-top: 1px solid #c5bdb4;
-    border-bottom: 1px solid #c5bdb4;
-    padding: 4.5rem 0;
-    margin-bottom: 5rem;
-    overflow: hidden;
-    position: relative;
-}
-
-.community-inner {
-    max-width: 1480px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-}
-
-.community-left {}
-
-.community-headline {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(2.2rem, 3.5vw, 3.4rem);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: #1a1a1a;
-    margin: 0.85rem 0 1.25rem;
-}
-.community-headline em { font-style: italic; color: #e85d26; }
-
-.community-body {
-    font-size: 0.95rem;
-    line-height: 1.75;
-    color: #8a7f74;
-    font-weight: 300;
-    max-width: 420px;
-    margin-bottom: 2rem;
-}
-
-.feature-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    margin-bottom: 2.25rem;
-}
-.feature-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
-    font-size: 0.9rem;
-    color: #3a3530;
-    line-height: 1.5;
-}
-.feature-icon {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: #fef0e8;
-    border: 1px solid rgba(232,93,38,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 0.1rem;
-    font-size: 0.75rem;
-}
-
-.community-right {
-    position: relative;
-}
-
-.forum-card-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    border: 1px solid #c5bdb4;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #c5bdb4;
-}
-
-.forum-thread-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.1rem 1.4rem;
-    background: #ffffff;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.18s;
-}
-.forum-thread-row:hover { background: #fef0e8; }
-.forum-thread-row:hover .ftr-title { color: #e85d26; }
-
-.ftr-avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    overflow: hidden;
-    background: #f0e9dc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.8rem;
-    color: #e85d26;
-    border: 2px solid #e8ddd0;
-}
-
-.ftr-content { flex: 1; min-width: 0; }
-.ftr-title {
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: #1a1a1a;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: color 0.18s;
-    margin-bottom: 0.22rem;
-}
-.ftr-meta {
-    font-size: 0.7rem;
-    color: #8a7f74;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-.ftr-tag {
-    background: #f0e9dc;
-    padding: 0.1rem 0.5rem;
-    border-radius: 2px;
-    font-weight: 500;
-    color: #3a3530;
-    font-size: 0.65rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-
-.ftr-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.2rem;
-    flex-shrink: 0;
-}
-.ftr-replies {
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: #3a3530;
-}
-.ftr-replies-label {
-    font-size: 0.62rem;
-    color: #8a7f74;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-/* ─── HOW IT WORKS ─────────────────────────────────────────── */
-.steps-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    border: 1px solid #c5bdb4;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 5rem;
-}
-
-.step-item {
-    padding: 2.5rem 2rem;
-    border-right: 1px solid #c5bdb4;
-    position: relative;
-    transition: background 0.2s;
-}
-.step-item:last-child { border-right: none; }
-.step-item:hover { background: #fef0e8; }
-
-.step-number {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 4rem;
-    font-weight: 300;
-    line-height: 1;
-    color: #e8ddd0;
-    position: absolute;
-    top: 1.5rem;
-    right: 1.75rem;
-    letter-spacing: -0.05em;
-    transition: color 0.2s;
-}
-.step-item:hover .step-number { color: rgba(232,93,38,0.15); }
-
-.step-icon {
-    width: 44px; height: 44px;
-    background: #1a1a1a;
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    transition: background 0.2s;
-}
-.step-item:hover .step-icon { background: #e85d26; }
-.step-icon svg { width: 20px; height: 20px; stroke: white; fill: none; }
-
-.step-title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 0.6rem;
-}
-.step-desc {
-    font-size: 0.85rem;
-    line-height: 1.65;
-    color: #8a7f74;
-    font-weight: 300;
-}
-
-/* ─── CTA BANNER ───────────────────────────────────────────── */
-.cta-banner {
-    background: #1a1a1a;
-    border-radius: 4px;
-    padding: 5rem 4rem;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 3rem;
-    margin-bottom: 5rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta-banner::before {
-    content: 'JOIN';
-    position: absolute;
-    right: -1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 16rem;
-    font-weight: 300;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255,255,255,0.04);
-    line-height: 1;
-    pointer-events: none;
-    user-select: none;
-    letter-spacing: -0.04em;
-}
-
-.cta-eyebrow {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: #e85d26;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-}
-.cta-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #e85d26; }
-
-.cta-headline {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(2rem, 3vw, 3rem);
-    font-weight: 300;
-    color: #ffffff;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-}
-.cta-headline em { font-style: italic; color: #e85d26; }
-
-.cta-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    align-items: flex-end;
-}
-
-.btn-cta-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.65rem;
-    padding: 1rem 2.25rem;
-    background: #e85d26;
-    color: #ffffff;
-    text-decoration: none;
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    transition: background 0.2s, transform 0.2s;
-    white-space: nowrap;
-}
-.btn-cta-primary:hover { background: #c44b18; transform: translateY(-2px); }
-
-.btn-cta-ghost {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.45);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    padding-bottom: 1px;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-}
-.btn-cta-ghost:hover { color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.4); }
-
-/* ─── FOOTER ───────────────────────────────────────────────── */
-.site-footer {
-    border-top: 1px solid #c5bdb4;
-    padding: 3rem 0 2rem;
-}
-.footer-inner {
-    max-width: 1480px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    flex-wrap: wrap;
-}
-.footer-brand {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    color: #1a1a1a;
-    letter-spacing: -0.02em;
-}
-.footer-brand em { font-style: italic; color: #e85d26; }
-.footer-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-}
-.footer-links a {
-    font-size: 0.78rem;
-    color: #8a7f74;
-    text-decoration: none;
-    letter-spacing: 0.06em;
-    transition: color 0.2s;
-}
-.footer-links a:hover { color: #e85d26; }
-.footer-copy {
-    font-size: 0.72rem;
-    color: #c5bdb4;
-    letter-spacing: 0.06em;
-}
-
-/* ─── ANIMATIONS ───────────────────────────────────────────── */
-@@keyframes riseIn {
-    from { opacity: 0; transform: translateY(22px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-@@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-@@keyframes floatCard {
-    from { opacity: 0; transform: translateX(-30px) scale(0.95); }
-    to   { opacity: 1; transform: translateX(0) scale(1); }
-}
-
-/* Scroll reveal */
-.reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1);
-}
-.reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-.reveal-d1 { transition-delay: 0.08s; }
-.reveal-d2 { transition-delay: 0.16s; }
-.reveal-d3 { transition-delay: 0.24s; }
-.reveal-d4 { transition-delay: 0.32s; }
-
-/* ─── RESPONSIVE ───────────────────────────────────────────── */
-@@media (max-width: 1100px) {
-    .recipe-row { grid-template-columns: repeat(2, 1fr); }
-    .cuisines-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-@@media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; height: auto; max-height: none; }
-    .hero-left {
-        padding: 2rem 1.75rem;
-        min-height: 60vh;
-        order: 2;
+    /* ─── BASE RESET ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background-color: #fdfaf6;
+        color: #1a1a1a;
+        line-height: 1.6;
+        overflow-x: hidden;
     }
-    .hero-right { min-height: 50vw; order: 1; }
-    .editorial-split { grid-template-columns: 1fr; }
-    .ed-image-side { min-height: 300px; }
-    .community-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    .steps-grid { grid-template-columns: 1fr 1fr; }
-    .step-item { border-bottom: 1px solid #c5bdb4; }
-    .cta-banner { grid-template-columns: 1fr; padding: 3rem 2rem; }
-    .cta-buttons { align-items: flex-start; }
-}
 
-@@media (max-width: 600px) {
-    .recipe-row { grid-template-columns: 1fr; }
-    .cuisines-grid { grid-template-columns: 1fr 1fr; }
-    .steps-grid { grid-template-columns: 1fr; }
-    .hero-stats { gap: 1.5rem; }
-    .hero-left { padding: 4rem 1.5rem 2rem; }
-    .section { padding: 0 1.25rem; }
-    .section-head { flex-direction: column; align-items: flex-start; }
-}
+    .container {
+        max-width: 1520px;
+        margin: 0 auto;
+        padding: 0 2.5rem;
+    }
+
+    /* ─── HERO SECTION ─── */
+    .hero {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        min-height: 95vh;
+        align-items: center;
+        gap: 5rem;
+        padding-top: 2rem;
+    }
+
+    .hero-content {
+        z-index: 10;
+    }
+
+    .eyebrow {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.35em;
+        color: #e85d26;
+        font-weight: 700;
+        margin-bottom: 2.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+    }
+
+    .eyebrow::after {
+        content: '';
+        height: 1px;
+        width: 50px;
+        background: #e85d26;
+    }
+
+    .hero-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(3.5rem, 6.5vw, 7rem);
+        line-height: 0.9;
+        font-weight: 300;
+        margin-bottom: 2.5rem;
+        letter-spacing: -0.04em;
+    }
+
+    .hero-title em {
+        font-style: italic;
+        color: #e85d26;
+        font-weight: 400;
+    }
+
+    .hero-sub {
+        font-size: 1.15rem;
+        color: #6e675f;
+        max-width: 500px;
+        margin-bottom: 3.5rem;
+        font-weight: 300;
+    }
+
+    /* Hero Bento Visuals */
+    .hero-visuals {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(12, 1fr);
+        height: 85vh;
+        position: relative;
+    }
+
+    .visual-box {
+        overflow: hidden;
+        border-radius: 2px;
+        box-shadow: 0 20px 40px -15px rgba(0,0,0,0.12);
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .visual-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 1.5s ease;
+    }
+
+    .visual-main {
+        grid-column: 1 / 11;
+        grid-row: 1 / 11;
+        z-index: 2;
+    }
+
+    .visual-overlap {
+        grid-column: 6 / 13;
+        grid-row: 7 / 13;
+        z-index: 3;
+        border: 15px solid #fdfaf6;
+    }
+
+    .visual-box:hover img { transform: scale(1.1); }
+
+    .floating-badge {
+        position: absolute;
+        top: 10%;
+        right: -5%;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 2.5rem;
+        border-radius: 50%;
+        width: 140px;
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        border: 1px solid rgba(0,0,0,0.05);
+        z-index: 4;
+        animation: rotateBadge 25s linear infinite;
+    }
+
+    @@keyframes rotateBadge {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 1.2rem;
+        padding: 1.3rem 3rem;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .btn-dark {
+        background: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .btn-dark:hover {
+        background: #e85d26;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(232, 93, 38, 0.2);
+    }
+
+    /* ─── MARQUEE ─── */
+    .marquee {
+        background: #1a1a1a;
+        color: #ffffff;
+        padding: 1.8rem 0;
+        overflow: hidden;
+        white-space: nowrap;
+        display: flex;
+        border-radius: 4px;
+        margin: 4rem 0;
+    }
+
+    .marquee-content {
+        display: flex;
+        animation: scroll 40s linear infinite;
+    }
+
+    .marquee-text {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4em;
+        margin-right: 5rem;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        opacity: 0.6;
+    }
+
+    .marquee-text::after {
+        content: '✦';
+        color: #e85d26;
+    }
+
+    @@keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* ─── RECIPE CARDS ─── */
+    .section-pad { padding: 10rem 0; }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 5rem;
+    }
+
+    .recipe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 3rem;
+    }
+
+    .recipe-card {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: all 0.5s ease;
+    }
+
+    .recipe-img-container {
+        aspect-ratio: 4/5;
+        overflow: hidden;
+        background: #f0e9dc;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .recipe-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+
+    .recipe-card:hover .recipe-img-container img {
+        transform: scale(1.08);
+    }
+
+    .recipe-badge {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 0.5rem 1rem;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .recipe-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.2rem;
+        line-height: 1.1;
+        font-weight: 500;
+        margin-bottom: 0.8rem;
+    }
+
+    .recipe-meta {
+        font-size: 0.85rem;
+        color: #6e675f;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        display: flex;
+        gap: 1rem;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @@media (max-width: 1024px) {
+        .hero { grid-template-columns: 1fr; text-align: center; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .hero-sub { margin-left: auto; margin-right: auto; }
+        .hero-visuals { height: 60vh; }
+    }
 </style>
 
-
-<!-- ══════════════════════════════════════════════════ HERO ══ -->
-<section class="hero" aria-label="Welcome">
-
-    <!-- Left panel: top bar / centre content / bottom stats -->
-    <div class="hero-left">
-
-        <!-- TOP BAR -->
-        <div class="hero-topbar">
-            <span class="hero-issue-tag">Est. 2024</span>
-            <span class="hero-issue-date">200+ Recipes · 34 Cuisines</span>
-        </div>
-
-        <!-- CENTRE -->
-        <div class="hero-center">
-            <div class="hero-kicker">
-                <div class="eyebrow">The Culinary Community</div>
-            </div>
-
-            <h1 class="hero-headline">
-                Cook more.<br>
-                <em>Share</em> more.<br>
-                Live fully.
+<main class="container">
+    <section class="hero">
+        <div class="hero-content">
+            <div class="eyebrow">The Global Culinary Journal</div>
+            <h1 class="hero-title">
+                Cook with <em>Purpose</em>.<br>
+                Live with Flavor.
             </h1>
-
             <p class="hero-sub">
-                Discover handcrafted recipes from around the world, rate your favorites,
-                take personal notes, and join a community of passionate cooks debating
-                the finer points of everything from ramen to risotto.
+                A curated sanctuary for the home chef. Discover artisanal recipes from across the globe, refine your technique, and archive your kitchen triumphs.
             </p>
-
-            <div class="hero-cta-row">
-                <a href="/Recipe" class="btn-primary">
-                    Explore Recipes
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                        <polyline points="12 5 19 12 12 19"/>
-                    </svg>
-                </a>
-                <a href="/Forum" class="btn-ghost">Join the Forum</a>
+            <div class="hero-actions">
+                <a href="/Recipe" class="btn btn-dark">Explore the Archive</a>
+            </div>
+            
+            <div style="margin-top: 6rem; display: flex; gap: 5rem;">
+                <div>
+                    <span style="display:block; font-family:'Cormorant Garamond'; font-size: 3rem; color: #1a1a1a;">200+</span>
+                    <span style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.2em; color:#6e675f; font-weight:700;">Artisan Recipes</span>
+                </div>
+                <div>
+                    <span style="display:block; font-family:'Cormorant Garamond'; font-size: 3rem; color: #1a1a1a;">34</span>
+                    <span style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.2em; color:#6e675f; font-weight:700;">Global Cuisines</span>
+                </div>
             </div>
         </div>
 
-        <!-- BOTTOM STATS BAR -->
-        <div class="hero-stats">
-            <div>
-                <span class="stat-num">200+</span>
-                <span class="stat-label">Recipes</span>
+        <div class="hero-visuals">
+            <div class="floating-badge">Member <br> Favorite</div>
+            <div class="visual-box visual-main">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80" alt="Plated Salmon">
             </div>
-            <div>
-                <span class="stat-num">34</span>
-                <span class="stat-label">Cuisines</span>
-            </div>
-            <div>
-                <span class="stat-num">∞</span>
-                <span class="stat-label">Discussions</span>
+            <div class="visual-box visual-overlap">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" alt="Fresh Grilling">
             </div>
         </div>
-    </div>
+    </section>
+</main>
 
-    <!-- Right mosaic -->
-    <div class="hero-right">
-        <div class="hero-mosaic">
-            <div class="mosaic-cell">
-                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Featured dish" />
-                <div class="mosaic-overlay"></div>
-            </div>
-            <div class="mosaic-cell">
-                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80" alt="Cooking" />
-                <div class="mosaic-overlay"></div>
-            </div>
-            <div class="mosaic-cell">
-                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Pizza" />
-                <div class="mosaic-overlay"></div>
-            </div>
-        </div>
-
-       
-
-        <div class="hero-ticker" aria-hidden="true">
-            <span class="ticker-text">Discover · Cook · Share · Discuss · Rate · Save · Explore · Create ·&nbsp;</span>
-        </div>
-    </div>
-
-</section>
-
-
-<!-- ══════════════════════════════════════════════ MARQUEE ══ -->
-<div class="marquee-strip" aria-hidden="true">
-    <div class="marquee-track">
-        @{
-            var marqueeItems = new[] { "Italian","French","Japanese","Mexican","Indian","Thai","Mediterranean","Chinese","Greek","Spanish","Korean","Moroccan","Lebanese","American","Vietnamese" };
-            // Duplicate for seamless loop
-            for (int pass = 0; pass < 2; pass++)
-            {
-                foreach (var item in marqueeItems)
-                {
-                    <span class="marquee-item">
-                        <span class="dot"></span>
-                        @item cuisine
-                    </span>
-                }
-            }
+<div class="marquee">
+    <div class="marquee-content">
+        @for(int i=0; i<3; i++) {
+            <span class="marquee-text">Mediterranean Kitchen</span>
+            <span class="marquee-text">Japanese Umami</span>
+            <span class="marquee-text">Rustic Italian</span>
+            <span class="marquee-text">Oaxacan Spice</span>
+            <span class="marquee-text">Nordic Minimalism</span>
         }
     </div>
 </div>
 
-
-<!-- ══════════════════════════════════════════ FEATURED RECIPES ══ -->
-<div class="section">
-    <div class="section-row">
-        <div class="section-head reveal">
-            <div class="section-head-left">
-                <div class="eyebrow">Curated Picks</div>
-                <div class="section-title-block">
-                    <h2>This Week's <em>Finest</em></h2>
-                </div>
-            </div>
-            <a href="/Recipe" class="section-see-all">
-                View All Recipes
-                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                    <polyline points="12 5 19 12 12 19"/>
-                </svg>
-            </a>
+<section class="container section-pad">
+    <header class="section-header">
+        <div>
+            <div class="eyebrow">Seasonal Highlights</div>
+            <h2 style="font-family:'Cormorant Garamond'; font-size: 4rem; font-weight: 300; letter-spacing:-0.03em;">This Week's <em>Selection</em></h2>
         </div>
+        <a href="/Recipe" style="color: #1a1a1a; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.25em; text-decoration: none; border-bottom: 2px solid #e85d26; padding-bottom: 5px;">View Full Archive</a>
+    </header>
 
-        <div class="recipe-row">
-            @{
-                // Render top-rated recipe cards from ViewBag if available, else placeholders
-                var featuredRecipes = ViewBag.FeaturedRecipes as IEnumerable<RecipeFinder.Models.Recipe>;
-                if (featuredRecipes != null && featuredRecipes.Any())
+    <div class="recipe-grid">
+        @{
+            var featured = ViewBag.FeaturedRecipes as IEnumerable<RecipeFinder.Models.Recipe>;
+            if (featured != null && featured.Any())
+            {
+                foreach (var recipe in featured.Take(4))
                 {
-                    int idx = 0;
-                    foreach (var recipe in featuredRecipes.Take(4))
-                    {
-                        string badgeClass = recipe.Difficulty.ToString() switch {
-                            "Easy" => "badge-easy",
-                            "Hard" => "badge-hard",
-                            _ => "badge-medium"
-                        };
-                        <article class="r-card reveal reveal-d@(idx+1)" onclick="window.location='@Url.Action("Details","Recipe",new{id=recipe.Id})'">
-                            <div class="r-card-img">
-                                <img src="@recipe.ImageUrl" alt="@recipe.Name" loading="lazy" />
-                                <span class="r-badge @badgeClass">@recipe.Difficulty</span>
-                                <span class="r-cuisine">@recipe.Cuisine</span>
-                            </div>
-                            <div class="r-body">
-                                <h3 class="r-name">@recipe.Name</h3>
-                                <div class="r-meta">
-                                    <span>@recipe.TotalTime() min</span>
-                                    <span class="r-meta-sep">·</span>
-                                    <span>@recipe.Servings servings</span>
-                                </div>
-                                <div class="r-rating">
-                                    <span class="r-stars">★★★★★</span>
-                                    <span class="r-rating-num">@recipe.Rating.ToString("F1")</span>
-                                    <span class="r-rating-count">(@recipe.RatingCount)</span>
-                                </div>
-                            </div>
-                        </article>
-                        idx++;
-                    }
-                }
-                else
-                {
-                    // Placeholder cards for when ViewBag is not wired
-                    var placeholders = new[] {
-                        new { Name="Spaghetti Carbonara", Cuisine="Italian",  Time="30", Rating="4.8", Count="214", Diff="Easy",   Img="https://images.unsplash.com/photo-1612874742237-6526221588e3?w=600&q=80" },
-                        new { Name="Beef Rendang",         Cuisine="Indonesian",Time="90",Rating="4.9",Count="87",  Diff="Hard",   Img="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80" },
-                        new { Name="Pad Thai",             Cuisine="Thai",     Time="25", Rating="4.7", Count="156", Diff="Medium", Img="https://images.unsplash.com/photo-1559314809-0d155014e29e?w=600&q=80" },
-                        new { Name="Shakshuka",            Cuisine="Middle Eastern",Time="20",Rating="4.6",Count="98",Diff="Easy", Img="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=600&q=80" },
-                    };
-                    int pi = 0;
-                    foreach (var p in placeholders)
-                    {
-                        string bc = p.Diff == "Easy" ? "badge-easy" : p.Diff == "Hard" ? "badge-hard" : "badge-medium";
-                        <article class="r-card reveal reveal-d@(pi+1)" style="cursor:pointer" onclick="window.location='/Recipe'">
-                            <div class="r-card-img">
-                                <img src="@p.Img" alt="@p.Name" loading="lazy" />
-                                <span class="r-badge @bc">@p.Diff</span>
-                                <span class="r-cuisine">@p.Cuisine</span>
-                            </div>
-                            <div class="r-body">
-                                <h3 class="r-name">@p.Name</h3>
-                                <div class="r-meta">
-                                    <span>@p.Time min</span>
-                                    <span class="r-meta-sep">·</span>
-                                    <span>4 servings</span>
-                                </div>
-                                <div class="r-rating">
-                                    <span class="r-stars">★★★★★</span>
-                                    <span class="r-rating-num">@p.Rating</span>
-                                    <span class="r-rating-count">(@p.Count)</span>
-                                </div>
-                            </div>
-                        </article>
-                        pi++;
-                    }
-                }
-            }
-        </div>
-    </div>
-</div>
-
-
-<!-- ══════════════════════════════════════ EDITORIAL / FORUM ══ -->
-<div class="section">
-    <div class="editorial-split reveal">
-        <div class="ed-image-side">
-            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80" alt="Fine dining" />
-            <div class="ed-image-gradient"></div>
-        </div>
-        <div class="ed-content-side">
-            <div class="ed-label">Live Discussions</div>
-            <h2 class="ed-headline">The kitchen table<br><em>never sleeps</em></h2>
-            <p class="ed-body">
-                Debate cooking techniques, swap ingredient hacks, troubleshoot 
-                disasters, and celebrate wins. Our forum is where real cooks 
-                talk real food — no gatekeeping, ever.
-            </p>
-
-            <div class="ed-forum-preview">
-                @{
-                    var threads = new[] {
-                        new { User="MK", Title="Is sous-vide ruining the art of cooking?", Replies="47", Time="2h ago", Hot=true },
-                        new { User="SA", Title="My sourdough starter won't activate — help!", Replies="23", Time="4h ago", Hot=false },
-                        new { User="JP", Title="Best substitutes for fish sauce in Thai dishes", Replies="61", Time="6h ago", Hot=true },
-                    };
-                    foreach (var thread in threads)
-                    {
-                        <a href="/Forum" class="ed-forum-thread">
-                            <div class="thread-avatar">@thread.User</div>
-                            <div class="thread-info">
-                                <div class="thread-title">@thread.Title</div>
-                                <div class="thread-meta">
-                                    <span>@thread.Time</span>
-                                    <span>·</span>
-                                    <span class="@(thread.Hot ? "thread-hot" : "")">@thread.Replies replies@(thread.Hot ? " 🔥" : "")</span>
-                                </div>
-                            </div>
-                        </a>
-                    }
-                }
-            </div>
-
-            <a href="/Forum" class="btn-ghost" style="color:rgba(255,255,255,0.6); border-color:rgba(255,255,255,0.2);">
-                Enter the Forum →
-            </a>
-        </div>
-    </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════ BROWSE CUISINES ══ -->
-<div class="section">
-    <div class="section-row" style="padding-top: 2rem;">
-        <div class="section-head reveal">
-            <div class="section-head-left">
-                <div class="eyebrow">34 Cuisines</div>
-                <div class="section-title-block">
-                    <h2>Browse by <em>Origin</em></h2>
-                </div>
-            </div>
-            <a href="/Recipe" class="section-see-all">
-                All Cuisines
-                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                    <polyline points="12 5 19 12 12 19"/>
-                </svg>
-            </a>
-        </div>
-
-        <div class="cuisines-grid">
-            @{
-                var cuisineData = new[] {
-                    new { Name="Italian",      Count="24", Img="https://images.unsplash.com/photo-1498579150354-977475b7ea0b?w=500&q=75" },
-                    new { Name="Japanese",     Count="18", Img="https://images.unsplash.com/photo-1553621042-f6e147245754?w=500&q=75" },
-                    new { Name="Mexican",      Count="15", Img="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500&q=75" },
-                    new { Name="French",       Count="12", Img="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=75" },
-                    new { Name="Indian",       Count="21", Img="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=500&q=75" },
-                    new { Name="Thai",         Count="14", Img="https://images.unsplash.com/photo-1559314809-0d155014e29e?w=500&q=75" },
-                };
-                int ci = 0;
-                foreach (var c in cuisineData)
-                {
-                    <a href="/Recipe?cuisine=@c.Name" class="cuisine-card reveal reveal-d@((ci%4)+1)">
-                        <img class="cuisine-img" src="@c.Img" alt="@c.Name cuisine" loading="lazy" />
-                        <div class="cuisine-overlay"></div>
-                        <div class="cuisine-label">
-                            @c.Name
-                            <span class="cuisine-count">@c.Count recipes</span>
+                    <a href="@Url.Action("Details","Recipe",new{id=recipe.Id})" class="recipe-card">
+                        <div class="recipe-img-container">
+                            <span class="recipe-badge">@recipe.Cuisine</span>
+                            <img src="@recipe.ImageUrl" alt="@recipe.Name" loading="lazy">
+                        </div>
+                        <h3 class="recipe-title">@recipe.Name</h3>
+                        <div class="recipe-meta">
+                            <span>@recipe.TotalTime() Mins</span>
+                            <span style="color: #e8ddd0;">|</span>
+                            <span>@recipe.Difficulty</span>
                         </div>
                     </a>
-                    ci++;
                 }
             }
-        </div>
-    </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════════ COMMUNITY ══ -->
-<div class="community-band">
-    <div class="community-inner">
-        <div class="community-left reveal">
-            <div class="eyebrow">Why Join</div>
-            <h2 class="community-headline">Your personal<br><em>culinary universe</em></h2>
-            <p class="community-body">
-                RecipeFinder isn't just a collection of recipes — it's a living, 
-                breathing community where your cooking life gets richer every day you use it.
-            </p>
-            <ul class="feature-list">
-                <li class="feature-item">
-                    <div class="feature-icon">♥</div>
-                    <span>Save unlimited favorites and build your personal recipe library</span>
-                </li>
-                <li class="feature-item">
-                    <div class="feature-icon">★</div>
-                    <span>Rate recipes and trust ratings from real cooks, not bots</span>
-                </li>
-                <li class="feature-item">
-                    <div class="feature-icon">📝</div>
-                    <span>Add private notes — your secret modifications, forever saved</span>
-                </li>
-                <li class="feature-item">
-                    <div class="feature-icon">💬</div>
-                    <span>Start or join discussions on any recipe or cooking topic</span>
-                </li>
-            </ul>
-            <a href="/Account/Register" class="btn-primary">
-                Create Free Account
-                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                    <polyline points="12 5 19 12 12 19"/>
-                </svg>
-            </a>
-        </div>
-
-        <div class="community-right reveal reveal-d2">
-            <div class="forum-card-stack">
-                @{
-                    var forumRows = new[] {
-                        new { Init="CE", Name="Claire E.", Title="Changed the butter to brown butter — absolute game changer 🤌", Tag="Tip", Replies="34", Time="1h" },
-                        new { Init="RK", Name="Raj K.",   Title="Does anyone else add a splash of pasta water to carbonara?", Tag="Technique", Replies="58", Time="2h" },
-                        new { Init="LB", Name="Luna B.",  Title="Finally nailed the perfect croissant after 12 attempts!", Tag="Win", Replies="92", Time="3h" },
-                        new { Init="TW", Name="Tom W.",   Title="The case against using garlic presses — an essay", Tag="Opinion", Replies="147", Time="5h" },
-                        new { Init="AM", Name="Anya M.",  Title="What's your go-to weeknight dinner when you have nothing?", Tag="Q&A", Replies="213", Time="8h" },
-                    };
-                    foreach (var row in forumRows)
-                    {
-                        <a href="/Forum" class="forum-thread-row">
-                            <div class="ftr-avatar">@row.Init</div>
-                            <div class="ftr-content">
-                                <div class="ftr-title">@row.Title</div>
-                                <div class="ftr-meta">
-                                    <span class="ftr-tag">@row.Tag</span>
-                                    <span>@row.Name</span>
-                                    <span>·</span>
-                                    <span>@row.Time ago</span>
-                                </div>
-                            </div>
-                            <div class="ftr-right">
-                                <span class="ftr-replies">@row.Replies</span>
-                                <span class="ftr-replies-label">replies</span>
-                            </div>
-                        </a>
-                    }
-                }
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════════ HOW IT WORKS ══ -->
-<div class="section">
-    <div class="section-row" style="padding-top: 0; padding-bottom: 3rem;">
-        <div class="section-head reveal">
-            <div class="section-head-left">
-                <div class="eyebrow">Simple by Design</div>
-                <div class="section-title-block">
-                    <h2>How it <em>works</em></h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="steps-grid">
-            <div class="step-item reveal">
-                <span class="step-number">01</span>
-                <div class="step-icon">
-                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                </div>
-                <h3 class="step-title">Discover</h3>
-                <p class="step-desc">Filter 200+ recipes by cuisine, difficulty, cook time, dietary needs, and minimum rating. Find exactly what you're craving.</p>
-            </div>
-            <div class="step-item reveal reveal-d1">
-                <span class="step-number">02</span>
-                <div class="step-icon">
-                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                </div>
-                <h3 class="step-title">Save & Rate</h3>
-                <p class="step-desc">Favorite the recipes you love and rate each dish to help others find the best. Your feedback shapes the community.</p>
-            </div>
-            <div class="step-item reveal reveal-d2">
-                <span class="step-number">03</span>
-                <div class="step-icon">
-                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                    </svg>
-                </div>
-                <h3 class="step-title">Take Notes</h3>
-                <p class="step-desc">Add private, personal notes to any recipe. Track your modifications, substitutions, and hard-won improvements.</p>
-            </div>
-            <div class="step-item reveal reveal-d3">
-                <span class="step-number">04</span>
-                <div class="step-icon">
-                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                </div>
-                <h3 class="step-title">Discuss</h3>
-                <p class="step-desc">Jump into forum threads about techniques, ingredients, cuisines, and culinary debates. Learn from fellow cooks every day.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════════ CTA BANNER ══ -->
-<div class="section">
-    <div class="cta-banner reveal">
-        <div>
-            <div class="cta-eyebrow">Free Forever</div>
-            <h2 class="cta-headline">
-                Ready to cook<br><em>something great?</em>
-            </h2>
-        </div>
-        <div class="cta-buttons">
-            <a href="/Account/Register" class="btn-cta-primary">
-                Start Cooking Free →
-            </a>
-            <a href="/Recipe" class="btn-cta-ghost">Browse without account</a>
-        </div>
-    </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════════════ FOOTER ══ -->
-<footer class="site-footer">
-    <div class="footer-inner">
-        <div class="footer-brand">Recipe<em>Finder</em></div>
-        <ul class="footer-links">
-            <li><a href="/Recipe">Recipes</a></li>
-            <li><a href="/Forum">Forum</a></li>
-            <li><a href="/Account/Register">Sign Up</a></li>
-            <li><a href="/Account/Login">Log In</a></li>
-        </ul>
-        <div class="footer-copy">© @DateTime.Now.Year RecipeFinder. All rights reserved.</div>
-    </div>
-</footer>
-
-
-<script>
-// ── Scroll Reveal ──────────────────────────────────────────────────────────
-const revealEls = document.querySelectorAll('.reveal');
-const observer  = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-        if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
         }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    </div>
+</section>
 
-revealEls.forEach(el => observer.observe(el));
-
-// ── Mosaic slow pan on load ────────────────────────────────────────────────
-document.querySelectorAll('.mosaic-cell img').forEach((img, i) => {
-    img.style.transition = `transform ${7 + i * 2}s ease`;
-    setTimeout(() => { img.style.transform = `scale(1.04)`; }, 300 + i * 200);
-});
-</script>
+<section style="background: #1a1a1a; color: #ffffff; padding: 8rem 0; border-radius: 4px;" class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 4rem; padding: 0 4rem;">
+        <div style="text-align: center;">
+            <span style="font-family: 'Cormorant Garamond'; font-size: 4rem; color: #e85d26; display: block; margin-bottom: 1rem;">01</span>
+            <h4 style="text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.9rem; margin-bottom: 1rem;">Discover</h4>
+            <p style="font-size: 0.9rem; opacity: 0.5; font-weight: 300;">Browse our vast library of vetted, world-class recipes.</p>
+        </div>
+        <div style="text-align: center;">
+            <span style="font-family: 'Cormorant Garamond'; font-size: 4rem; color: #e85d26; display: block; margin-bottom: 1rem;">02</span>
+            <h4 style="text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.9rem; margin-bottom: 1rem;">Customize</h4>
+            <p style="font-size: 0.9rem; opacity: 0.5; font-weight: 300;">Adjust servings, take notes, and save favorites to your library.</p>
+        </div>
+        <div style="text-align: center;">
+            <span style="font-family: 'Cormorant Garamond'; font-size: 4rem; color: #e85d26; display: block; margin-bottom: 1rem;">03</span>
+            <h4 style="text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.9rem; margin-bottom: 1rem;">Share</h4>
+            <p style="font-size: 0.9rem; opacity: 0.5; font-weight: 300;">Join the forum to debate techniques and show off results.</p>
+        </div>
+    </div>
+</section>
