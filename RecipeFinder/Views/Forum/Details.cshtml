@@ -563,8 +563,8 @@ body {
                 <span class="add-comment-label">Leave a comment</span>
                 <form asp-controller="ForumComment" asp-action="Add" method="post">
                     @Html.AntiForgeryToken()
-                    <input type="hidden" asp-for="NewComment.ForumPostId" />
-                    <textarea asp-for="NewComment.Body"
+                    <input type="hidden" name="ForumPostId" value="@Model.Id" />
+                    <textarea name="Body"
                               class="comment-textarea"
                               placeholder="Share your thoughts…"
                               maxlength="5000"></textarea>
