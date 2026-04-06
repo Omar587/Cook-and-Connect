@@ -81,16 +81,25 @@ public class ForumPostService : IForumPostService
             .Include(p => p.Flair)
             .Include(p => p.Recipe)
             .Include(p => p.Votes)
-            .Include(p => p.Comments.Where(c => c.ParentCommentId == null))  // top-level only
-                .ThenInclude(c => c.Replies.Where(r => !r.IsDeleted))
-                    .ThenInclude(r => r.Votes)
             .Include(p => p.Comments)
-                .ThenInclude(c => c.Customer)
+            .ThenInclude(c => c.Customer)
             .Include(p => p.Comments)
-                .ThenInclude(c => c.Votes)
+            .ThenInclude(c => c.Votes)
+            .Include(p => p.Comments)
+            .ThenInclude(c => c.Replies)
+            .ThenInclude(r => r.Customer)
+            .Include(p => p.Comments)
+            .ThenInclude(c => c.Replies)
+            .ThenInclude(r => r.Votes)
+            .Include(p => p.Comments)
+            .ThenInclude(c => c.Replies)
+            .ThenInclude(r => r.Replies)
+            .ThenInclude(r => r.Customer)
+            .Include(p => p.Comments)
+            .ThenInclude(c => c.Replies)
+            .ThenInclude(r => r.Replies)
+            .ThenInclude(r => r.Votes)
             .FirstOrDefaultAsync();
-
-        if (post is null) return null;
 
         return new ForumPostDetailViewModel
         {
