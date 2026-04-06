@@ -354,17 +354,87 @@ body {
 
                 @if (Model.AvailableRecipes.Any())
                 {
-                    <div class="form-section" style="margin-bottom:0">
-                        <label class="field-label" asp-for="RecipeId">Link a Recipe <em style="font-style:normal;color:#c5bdb4;font-weight:400">(optional)</em></label>
-                        <select asp-for="RecipeId" class="form-select">
-                            <option value="">None</option>
-                            @foreach (var recipe in Model.AvailableRecipes)
-                            {
-                                <option value="@recipe.Id">@recipe.Name</option>
-                            }
-                        </select>
-                        <div class="field-hint">Attach a recipe from the collection to your post.</div>
-                    </div>
+                  <div class="form-section" style="margin-bottom:0; position:relative;">
+    <label class="field-label">Link a Recipe <em style="font-style:normal;color:#c5bdb4;font-weight:400">(optional)</em></label>
+    
+    <!-- Hidden input that actually submits the value -->
+    <input type="hidden" name="RecipeId" id="recipeIdInput" value="" />
+    
+    <!-- Visible search box -->
+    <input type="text"
+           id="recipeSearch"
+           class="form-input"
+           placeholder="Search recipes…"
+           autocomplete="off" />
+
+    <!-- Dropdown list -->
+    <div id="recipeDropdown" style="
+        display:none;
+        position:absolute;
+        top:100%;
+        left:0; right:0;
+        background:white;
+        border:1px solid #c5bdb4;
+        border-radius:10px;
+        box-shadow:0 8px 24px rgba(0,0,0,0.1);
+        max-height:220px;
+        overflow-y:auto;
+        z-index:100;
+        margin-top:4px;">
+    </div>
+
+    <div class="field-hint">Type to search and select a recipe to attach.</div>
+</div>
+
+<script>
+(function () {
+    const recipes = [
+        { id: '', name: 'None' },
+        @foreach (var recipe in Model.AvailableRecipes)
+        {
+            <text>,{ id: '@recipe.Id', name: @Json.Serialize(recipe.Name) },</text>
+        }
+    ];
+
+    const searchInput  = document.getElementById('recipeSearch');
+    const hiddenInput  = document.getElementById('recipeIdInput');
+    const dropdown     = document.getElementById('recipeDropdown');
+
+    function renderDropdown(filter) {
+        const filtered = recipes.filter(r =>
+            r.name.toLowerCase().includes(filter.toLowerCase())
+        );
+
+        dropdown.innerHTML = filtered.map(r => `
+            <div class="recipe-option"
+                 data-id="${r.id}"
+                 data-name="${r.name}"
+                 style="padding:0.65rem 1rem; cursor:pointer; font-size:0.88rem; color:#1a1a1a; transition:background 0.1s;">
+                ${r.name}
+            </div>
+        `).join('');
+
+        dropdown.querySelectorAll('.recipe-option').forEach(opt => {
+            opt.addEventListener('mouseenter', () => opt.style.background = '#fef0e8');
+            opt.addEventListener('mouseleave', () => opt.style.background = '');
+            opt.addEventListener('mousedown', () => {
+                hiddenInput.value = opt.dataset.id;
+                searchInput.value = opt.dataset.name === 'None' ? '' : opt.dataset.name;
+                dropdown.style.display = 'none';
+            });
+        });
+
+        dropdown.style.display = filtered.length ? 'block' : 'none';
+    }
+
+    searchInput.addEventListener('input', () => renderDropdown(searchInput.value));
+    searchInput.addEventListener('focus', () => renderDropdown(searchInput.value));
+    document.addEventListener('click', e => {
+        if (!e.target.closest('#recipeSearch') && !e.target.closest('#recipeDropdown'))
+            dropdown.style.display = 'none';
+    });
+})();
+</script>
                 }
 
             </div>
