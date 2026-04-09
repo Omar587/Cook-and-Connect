@@ -7,7 +7,7 @@
 
     string AvatarColor(string name)
     {
-        var colors = new[] { "#e85d26","#2d7d46","#c17b1a","#2563eb","#7c3aed","#db2777","#0891b2" };
+        var colors = new[] { "#c0513d","#2d6a4f","#b5550a","#1d4ed8","#6d28d9","#be185d","#0e7490" };
         return colors[Math.Abs((name ?? "?").GetHashCode()) % colors.Length];
     }
 
@@ -23,516 +23,855 @@
 }
 
 <style>
+@@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    font-family: 'DM Sans', sans-serif;
-    background: #f0ece4;
-    color: #1a1a1a;
-    -webkit-font-smoothing: antialiased;
+body, .container, main, .pb-5, .mt-4 {
+    background: #f9f5ef !important;
 }
-
-.container { max-width: 100% !important; padding: 0 !important; }
 
 .forum-shell {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 1.5rem 1rem 4rem;
+    padding: 2rem 1.5rem 6rem;
+    background: #f9f5ef;
 }
 
-/* ─── HERO ─── */
-.forum-hero {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    padding: 1.5rem 1.75rem;
-    margin-bottom: 1rem;
+/* ══════════════════════════
+   MASTHEAD
+══════════════════════════ */
+.f-masthead {
+    background: linear-gradient(135deg, #2a1f14 0%, #3d2b1a 60%, #4a3520 100%);
+    border-radius: 20px;
+    padding: 2.5rem 3rem;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 2rem;
     flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(42,31,20,0.25), 0 1px 4px rgba(42,31,20,0.15);
 }
 
-.hero-left {}
-
-.hero-eyebrow {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #e85d26;
-    margin-bottom: 0.3rem;
+.f-masthead::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(200,82,26,0.25) 0%, transparent 70%);
+    pointer-events: none;
 }
 
-.hero-title {
+.f-masthead::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.f-masthead-watermark {
+    position: absolute;
+    right: 2.5rem; top: 50%;
+    transform: translateY(-50%);
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-size: 9rem;
     font-weight: 700;
-    color: #1a1a1a;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.07);
     line-height: 1;
     letter-spacing: -0.02em;
+    pointer-events: none;
+    user-select: none;
 }
 
-.hero-title em { font-style: italic; color: #e85d26; }
+.f-masthead-left { position: relative; z-index: 1; }
 
-.hero-sub {
-    font-size: 0.82rem;
-    color: #8a7f74;
-    margin-top: 0.4rem;
+.f-masthead-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #e8a87c;
+    margin-bottom: 0.65rem;
 }
 
-.btn-new-post {
+.f-masthead-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: #e8a87c;
+}
+
+.f-masthead-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #fdf6ee;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+}
+
+.f-masthead-title em {
+    font-style: italic;
+    color: #e8754a;
+}
+
+.f-masthead-stats {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.f-masthead-stat-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fdf6ee;
+    line-height: 1;
+    display: block;
+}
+
+.f-masthead-stat-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(253,246,238,0.45);
+    display: block;
+    margin-top: 0.15rem;
+}
+
+.f-masthead-stat-divider {
+    width: 1px;
+    height: 30px;
+    background: rgba(255,255,255,0.12);
+}
+
+.f-btn-new-post {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.4rem;
+    gap: 0.55rem;
+    padding: 0.9rem 1.9rem;
     background: #e85d26;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 100px;
     font-family: 'DM Sans', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
     text-decoration: none;
+    letter-spacing: 0.02em;
     cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(232,93,38,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
     white-space: nowrap;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
 }
-.btn-new-post:hover { background: #d44e1e; transform: translateY(-1px); color: white; text-decoration: none; }
 
-/* ─── LAYOUT ─── */
-.forum-layout {
+.f-btn-new-post:hover {
+    background: #d14f1e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(232,93,38,0.55);
+    color: white;
+    text-decoration: none;
+}
+
+.f-btn-new-post svg {
+    width: 15px; height: 15px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2.5; stroke-linecap: round;
+}
+
+/* ══════════════════════════
+   LAYOUT
+══════════════════════════ */
+.f-layout {
     display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 1rem;
+    grid-template-columns: 205px 1fr;
+    gap: 1.5rem;
     align-items: start;
 }
 
-/* ─── SIDEBAR ─── */
-.sidebar { position: sticky; top: 1.5rem; }
+/* ══════════════════════════
+   SIDEBAR
+══════════════════════════ */
+.f-sidebar { position: sticky; top: 1.5rem; }
 
-.sidebar-card {
-    background: #fff;
+.f-sidebar-section {
+    background: #fdf8f2;
     border-radius: 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
-    padding: 1rem;
-    margin-bottom: 1rem;
+    border: 1px solid rgba(180,145,100,0.2);
+    overflow: hidden;
+    margin-bottom: 0.85rem;
+    box-shadow: 0 1px 3px rgba(100,70,30,0.06);
 }
 
-.sidebar-card-title {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
+.f-sidebar-head {
+    padding: 0.8rem 1rem;
+    background: #f5ede0;
+    border-bottom: 1px solid rgba(180,145,100,0.18);
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.f-sidebar-head-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #e85d26;
+    flex-shrink: 0;
+}
+
+.f-sidebar-head-title {
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #8a7f74;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.65rem;
-    border-bottom: 1px solid #f3f0eb;
+    color: #7a6550;
 }
 
-.sort-tab {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.55rem 0.7rem;
-    border-radius: 9px;
-    font-size: 0.84rem;
-    font-weight: 500;
-    color: #8a7f74;
-    text-decoration: none;
-    transition: all 0.15s;
-    margin-bottom: 0.15rem;
-}
-.sort-tab:hover { background: #f3f0eb; color: #1a1a1a; text-decoration: none; }
-.sort-tab.active { background: #fef0e8; color: #e85d26; font-weight: 700; }
+.f-sidebar-body { padding: 0.4rem; }
 
-.flair-item {
+.f-sort-tab {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.48rem 0.7rem;
+    gap: 0.6rem;
+    padding: 0.58rem 0.7rem;
     border-radius: 9px;
     font-size: 0.82rem;
     font-weight: 500;
-    color: #8a7f74;
+    color: #6b5740;
     text-decoration: none;
     transition: all 0.15s;
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.08rem;
+    position: relative;
 }
-.flair-item:hover { background: #f3f0eb; color: #1a1a1a; text-decoration: none; }
-.flair-item.active { background: #f3f0eb; color: #1a1a1a; font-weight: 600; }
 
-.flair-dot {
-    width: 8px; height: 8px;
+.f-sort-tab:hover {
+    background: #f0e6d6;
+    color: #2a1f14;
+    text-decoration: none;
+}
+
+.f-sort-tab.active {
+    background: rgba(232,93,38,0.1);
+    color: #c8521a;
+    font-weight: 700;
+}
+
+.f-sort-tab.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 25%; bottom: 25%;
+    width: 3px;
+    background: #e85d26;
+    border-radius: 0 3px 3px 0;
+}
+
+.f-flair-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.52rem 0.7rem;
+    border-radius: 9px;
+    font-size: 0.79rem;
+    font-weight: 500;
+    color: #6b5740;
+    text-decoration: none;
+    transition: all 0.15s;
+    margin-bottom: 0.05rem;
+}
+
+.f-flair-item:hover {
+    background: #f0e6d6;
+    color: #2a1f14;
+    text-decoration: none;
+}
+
+.f-flair-item.active {
+    background: #ede3d4;
+    color: #2a1f14;
+    font-weight: 700;
+}
+
+.f-flair-pip {
+    width: 7px; height: 7px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
-/* ─── FEED ─── */
-.feed-bar {
+/* ══════════════════════════
+   FEED
+══════════════════════════ */
+.f-feed-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0 0.25rem;
 }
 
-.feed-count {
-    font-size: 0.78rem;
-    color: #8a7f74;
-    font-weight: 500;
+.f-feed-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a8927a;
 }
-.feed-count strong { color: #1a1a1a; font-weight: 700; }
 
-.post-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.f-feed-label strong { color: #6b5740; }
 
-/* ─── POST CARD ─── */
-.post-card {
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.03);
+.f-post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ══════════════════════════
+   POST CARD
+══════════════════════════ */
+.f-post-card {
+    background: #fdf8f2;
+    border-radius: 16px;
+    border: 1px solid rgba(180,145,100,0.2);
+    box-shadow: 0 1px 3px rgba(100,70,30,0.06), 0 3px 12px rgba(100,70,30,0.05);
     overflow: hidden;
-    transition: box-shadow 0.2s, transform 0.2s;
-    animation: cardIn 0.35s ease both;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease, background 0.2s;
+    cursor: pointer;
+    animation: f-card-in 0.45s cubic-bezier(0.22,1,0.36,1) both;
 }
 
-.post-card:hover {
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+.f-post-card:hover {
+    background: #fffdf9;
+    box-shadow: 0 2px 6px rgba(100,70,30,0.08), 0 12px 36px rgba(100,70,30,0.12);
+    transform: translateY(-4px);
+    border-color: rgba(180,145,100,0.38);
 }
 
-@@keyframes cardIn {
-    from { opacity: 0; transform: translateY(10px); }
+@@keyframes f-card-in {
+    from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.post-card:nth-child(1) { animation-delay: 0.03s; }
-.post-card:nth-child(2) { animation-delay: 0.06s; }
-.post-card:nth-child(3) { animation-delay: 0.09s; }
-.post-card:nth-child(4) { animation-delay: 0.12s; }
-.post-card:nth-child(5) { animation-delay: 0.15s; }
-.post-card:nth-child(6) { animation-delay: 0.18s; }
+.f-post-card:nth-child(1) { animation-delay: 0.04s; }
+.f-post-card:nth-child(2) { animation-delay: 0.09s; }
+.f-post-card:nth-child(3) { animation-delay: 0.14s; }
+.f-post-card:nth-child(4) { animation-delay: 0.19s; }
+.f-post-card:nth-child(5) { animation-delay: 0.24s; }
+.f-post-card:nth-child(6) { animation-delay: 0.29s; }
+.f-post-card:nth-child(7) { animation-delay: 0.34s; }
+.f-post-card:nth-child(8) { animation-delay: 0.39s; }
 
-.post-card-inner {
-    display: grid;
-    grid-template-columns: 52px 1fr;
-}
-
-/* Vote col */
-.vote-col {
+/* ── Vote column ── */
+.f-vote-col {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.2rem;
-    padding: 1.25rem 0;
-    background: #fafaf8;
-    border-right: 1px solid #f3f0eb;
+    gap: 0;
+    padding: 1.5rem 0;
+    background: #f5ede0;
+    border-right: 1px solid rgba(180,145,100,0.18);
+    transition: background 0.2s;
 }
 
-.vote-btn {
-    width: 28px; height: 28px;
-    border: none; background: none;
+.f-post-card:hover .f-vote-col {
+    background: #eee4d4;
+}
+
+.f-vote-btn {
+    width: 34px; height: 34px;
+    border: none;
+    background: none;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    color: #c5bdb4;
+    color: #c4b09a;
     transition: all 0.15s;
+    flex-shrink: 0;
 }
-.vote-btn:hover { background: #f0e9dc; color: #1a1a1a; }
-.vote-btn.up.voted   { color: #e85d26; }
-.vote-btn.down.voted { color: #6b7280; }
-.vote-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-.vote-score {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #1a1a1a;
+.f-vote-btn:hover {
+    background: rgba(232,93,38,0.12);
+    color: #e85d26;
+}
+
+.f-vote-btn.up.voted { color: #e85d26; }
+.f-vote-btn.down.voted { color: #6b7280; }
+
+.f-vote-btn svg {
+    width: 15px; height: 15px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.15s;
+}
+
+.f-vote-btn.up:hover svg  { transform: translateY(-2px); }
+.f-vote-btn.down:hover svg { transform: translateY(2px); }
+
+.f-vote-score-wrap {
+    padding: 0.3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.f-vote-score {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #6b5740;
+    line-height: 1;
     text-align: center;
-    min-width: 20px;
+    min-width: 30px;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s;
 }
-.vote-score.pos { color: #e85d26; }
-.vote-score.neg { color: #6b7280; }
 
-/* Post body */
-.post-body { padding: 1rem 1.25rem; min-width: 0; }
+.f-vote-score.pos { color: #c8521a; }
+.f-vote-score.neg { color: #6b7280; }
 
-.post-top {
+.f-vote-label {
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c4b09a;
+}
+
+/* ── Post content ── */
+.f-post-body {
+    padding: 1.35rem 1.5rem 1.2rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.f-post-author-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: 0.55rem;
+    margin-bottom: 0.75rem;
     flex-wrap: wrap;
 }
 
-.post-avatar {
+.f-author-avatar {
     width: 26px; height: 26px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 0.62rem;
-    font-weight: 700;
+    font-weight: 800;
     color: white;
+    flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+
+.f-author-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #2a1f14;
+}
+
+.f-author-sep {
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: #c4b09a;
     flex-shrink: 0;
 }
 
-.post-author { font-size: 0.78rem; font-weight: 700; color: #1a1a1a; }
+.f-post-time {
+    font-size: 0.72rem;
+    color: #a8927a;
+    font-weight: 400;
+}
 
-.post-time { font-size: 0.72rem; color: #8a7f74; }
-
-.post-flair {
+.f-post-flair {
     display: inline-flex;
     align-items: center;
-    padding: 0.12rem 0.5rem;
+    padding: 0.14rem 0.55rem;
     border-radius: 100px;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
 }
 
-.post-title {
+/* Title */
+.f-post-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
+    font-size: 1.45rem;
     font-weight: 700;
-    color: #1a1a1a;
+    color: #1a1208;
     line-height: 1.2;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.55rem;
     text-decoration: none;
     display: block;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     transition: color 0.15s;
 }
-.post-title:hover { color: #e85d26; text-decoration: none; }
 
-.post-preview {
-    font-size: 0.85rem;
-    color: #6b7280;
-    line-height: 1.55;
-    margin-bottom: 0.75rem;
+.f-post-card:hover .f-post-title { color: #c8521a; }
+
+/* Preview */
+.f-post-preview {
+    font-size: 0.875rem;
+    color: #6b5740;
+    line-height: 1.65;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    font-weight: 400;
+    min-height: 2.9rem;
+    flex-grow: 1;
 }
 
-.post-recipe-tag {
+/* Recipe tag */
+.f-recipe-tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    font-size: 0.75rem;
-    color: #e85d26;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: #c8521a;
     font-weight: 600;
     text-decoration: none;
-    margin-bottom: 0.75rem;
+    margin-top: 0.65rem;
+    padding: 0.28rem 0.7rem;
+    background: rgba(200,82,26,0.08);
+    border-radius: 100px;
+    border: 1px solid rgba(200,82,26,0.15);
+    transition: background 0.15s;
+    width: fit-content;
 }
-.post-recipe-tag:hover { text-decoration: underline; color: #e85d26; }
 
-.post-footer {
+.f-recipe-tag:hover { background: rgba(200,82,26,0.14); text-decoration: none; color: #c8521a; }
+
+/* Footer */
+.f-post-footer {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    gap: 0.15rem;
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(180,145,100,0.16);
 }
 
-.post-stat {
+.f-post-action {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    font-size: 0.75rem;
-    color: #8a7f74;
-    font-weight: 600;
-    text-decoration: none;
-    padding: 0.28rem 0.55rem;
+    gap: 0.38rem;
+    padding: 0.3rem 0.62rem;
     border-radius: 7px;
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: #a8927a;
+    text-decoration: none;
     transition: all 0.15s;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
 }
-.post-stat:hover { background: #f3f0eb; color: #1a1a1a; text-decoration: none; }
-.post-stat svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ─── EMPTY STATE ─── */
-.empty-state {
-    background: #fff;
-    border-radius: 14px;
-    padding: 4rem 2rem;
+.f-post-action:hover {
+    background: rgba(200,82,26,0.08);
+    color: #c8521a;
+    text-decoration: none;
+}
+
+.f-post-action svg {
+    width: 13px; height: 13px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.f-action-sep {
+    width: 1px; height: 14px;
+    background: rgba(180,145,100,0.25);
+    margin: 0 0.1rem;
+    flex-shrink: 0;
+}
+
+/* ══════════════════════════
+   EMPTY STATE
+══════════════════════════ */
+.f-empty {
+    background: #fdf8f2;
+    border-radius: 16px;
+    border: 1px solid rgba(180,145,100,0.2);
+    padding: 5rem 2rem;
     text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 }
-.empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-.empty-title { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 600; color: #8a7f74; margin-bottom: 0.5rem; }
-.empty-sub { font-size: 0.88rem; color: #c5bdb4; }
 
-/* ─── PAGINATION ─── */
-.pagination-wrap {
+.f-empty-icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; opacity: 0.4; }
+
+.f-empty-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #a8927a;
+    margin-bottom: 0.5rem;
+}
+
+.f-empty-sub { font-size: 0.88rem; color: #c4b09a; }
+
+.f-btn-empty {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 1.5rem;
+    padding: 0.72rem 1.5rem;
+    background: #e85d26;
+    color: white;
+    border-radius: 100px;
+    font-size: 0.83rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.f-btn-empty:hover { background: #d14f1e; transform: translateY(-1px); color: white; text-decoration: none; }
+
+/* ══════════════════════════
+   PAGINATION
+══════════════════════════ */
+.f-pagination {
+    margin-top: 2.5rem;
     display: flex;
     justify-content: center;
-    gap: 0.35rem;
+    align-items: center;
+    gap: 0.4rem;
 }
 
-.page-link {
+.f-page-link {
     display: flex; align-items: center; justify-content: center;
-    min-width: 38px; height: 38px; padding: 0 0.7rem;
-    border: 1px solid #e5e1db;
-    background: #fff;
-    color: #8a7f74;
+    min-width: 40px; height: 40px; padding: 0 0.75rem;
+    border: 1px solid rgba(180,145,100,0.3);
+    background: #fdf8f2;
+    color: #6b5740;
     text-decoration: none;
-    border-radius: 8px;
-    font-size: 0.82rem;
-    font-weight: 500;
+    border-radius: 9px;
+    font-size: 0.83rem;
+    font-weight: 600;
     transition: all 0.15s;
 }
-.page-link:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f3f0eb; text-decoration: none; }
-.page-link.active { background: #1a1a1a; border-color: #1a1a1a; color: white; font-weight: 700; }
-.page-link.prev-next { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 0 0.9rem; }
-.page-ellipsis { display: flex; align-items: center; color: #c5bdb4; padding: 0 0.2rem; }
 
+.f-page-link:hover { border-color: #e85d26; color: #e85d26; background: rgba(232,93,38,0.06); text-decoration: none; }
+.f-page-link.active { background: #2a1f14; border-color: #2a1f14; color: white; }
+.f-page-link.prev-next { font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 0 1rem; }
+.f-page-ellipsis { display: flex; align-items: center; color: #c4b09a; padding: 0 0.25rem; }
+
+/* ══════════════════════════
+   RESPONSIVE
+══════════════════════════ */
 @@media (max-width: 860px) {
-    .forum-layout { grid-template-columns: 1fr; }
-    .sidebar { position: relative; top: 0; }
+    .f-layout { grid-template-columns: 1fr; }
+    .f-sidebar { position: relative; top: 0; }
+    .f-masthead { padding: 1.75rem; }
+    .f-masthead-watermark { display: none; }
 }
 
 @@media (max-width: 560px) {
-    .forum-shell { padding: 0.75rem 0.5rem 3rem; }
-    .forum-hero { padding: 1.1rem; }
-    .post-card-inner { grid-template-columns: 44px 1fr; }
+    .forum-shell { padding: 1rem 0.75rem 4rem; }
+    .f-post-card { grid-template-columns: 50px 1fr; }
+    .f-post-body { padding: 1rem; }
+    .f-post-title { font-size: 1.2rem; }
+    .f-masthead-stats { display: none; }
 }
 </style>
 
 <div class="forum-shell">
 
-    <!-- Hero -->
-    <div class="forum-hero">
-        <div class="hero-left">
-            <div class="hero-eyebrow">Community</div>
-            <div class="hero-title">Share &amp; <em>Discuss</em></div>
-            <div class="hero-sub">@Model.TotalCount posts from the community</div>
+    <!-- ══ MASTHEAD ══ -->
+    <div class="f-masthead">
+        <div class="f-masthead-left">
+            <div class="f-masthead-eyebrow">Community Kitchen</div>
+            <div class="f-masthead-title">Share &amp; <em>Discuss</em></div>
+            <div class="f-masthead-stats">
+                <div class="f-masthead-stat">
+                    <span class="f-masthead-stat-value">@Model.TotalCount</span>
+                    <span class="f-masthead-stat-label">Posts</span>
+                </div>
+                <div class="f-masthead-stat-divider"></div>
+                <div class="f-masthead-stat">
+                    <span class="f-masthead-stat-value">@Model.Flairs.Count()</span>
+                    <span class="f-masthead-stat-label">Topics</span>
+                </div>
+            </div>
         </div>
-        <a asp-action="Create" class="btn-new-post">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <div class="f-masthead-watermark" aria-hidden="true">FORUM</div>
+        <a asp-action="Create" class="f-btn-new-post">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             New Post
         </a>
     </div>
 
-    <div class="forum-layout">
+    <div class="f-layout">
 
-        <!-- ── SIDEBAR ── -->
-        <aside class="sidebar">
-            <div class="sidebar-card">
-                <div class="sidebar-card-title">Sort</div>
-                <a class="sort-tab @(Model.Sort == "hot"  ? "active" : "")"
-                   asp-action="Index" asp-route-sort="hot"  asp-route-flairId="@Model.FilterFlairId">🔥 Hot</a>
-                <a class="sort-tab @(Model.Sort == "new"  ? "active" : "")"
-                   asp-action="Index" asp-route-sort="new"  asp-route-flairId="@Model.FilterFlairId">🆕 New</a>
-                <a class="sort-tab @(Model.Sort == "top"  ? "active" : "")"
-                   asp-action="Index" asp-route-sort="top"  asp-route-flairId="@Model.FilterFlairId">📈 Top</a>
+        <!-- ══ SIDEBAR ══ -->
+        <aside class="f-sidebar">
+
+            <div class="f-sidebar-section">
+                <div class="f-sidebar-head">
+                    <span class="f-sidebar-head-dot"></span>
+                    <span class="f-sidebar-head-title">Sort By</span>
+                </div>
+                <div class="f-sidebar-body">
+                    <a class="f-sort-tab @(Model.Sort == "hot" ? "active" : "")"
+                       asp-action="Index" asp-route-sort="hot" asp-route-flairId="@Model.FilterFlairId">
+                        🔥 Hot
+                    </a>
+                    <a class="f-sort-tab @(Model.Sort == "new" ? "active" : "")"
+                       asp-action="Index" asp-route-sort="new" asp-route-flairId="@Model.FilterFlairId">
+                        ✨ New
+                    </a>
+                    <a class="f-sort-tab @(Model.Sort == "top" ? "active" : "")"
+                       asp-action="Index" asp-route-sort="top" asp-route-flairId="@Model.FilterFlairId">
+                        📈 Top All Time
+                    </a>
+                </div>
             </div>
 
             @if (Model.Flairs.Any())
             {
-                <div class="sidebar-card">
-                    <div class="sidebar-card-title">Tags</div>
-                    <a class="flair-item @(Model.FilterFlairId == null ? "active" : "")"
-                       asp-action="Index" asp-route-sort="@Model.Sort">
-                        <span class="flair-dot" style="background:#c5bdb4"></span>
-                        All Posts
-                    </a>
-                    @foreach (var flair in Model.Flairs)
-                    {
-                        <a class="flair-item @(Model.FilterFlairId == flair.Id ? "active" : "")"
-                           asp-action="Index" asp-route-sort="@Model.Sort" asp-route-flairId="@flair.Id">
-                            <span class="flair-dot" style="background:@flair.ColorHex"></span>
-                            @flair.Name
+                <div class="f-sidebar-section">
+                    <div class="f-sidebar-head">
+                        <span class="f-sidebar-head-dot" style="background:#2d6a4f"></span>
+                        <span class="f-sidebar-head-title">Browse Topics</span>
+                    </div>
+                    <div class="f-sidebar-body">
+                        <a class="f-flair-item @(Model.FilterFlairId == null ? "active" : "")"
+                           asp-action="Index" asp-route-sort="@Model.Sort">
+                            <span class="f-flair-pip" style="background:#a8927a"></span>
+                            All Posts
                         </a>
-                    }
+                        @foreach (var flair in Model.Flairs)
+                        {
+                            <a class="f-flair-item @(Model.FilterFlairId == flair.Id ? "active" : "")"
+                               asp-action="Index" asp-route-sort="@Model.Sort" asp-route-flairId="@flair.Id">
+                                <span class="f-flair-pip" style="background:@flair.ColorHex"></span>
+                                @flair.Name
+                            </a>
+                        }
+                    </div>
                 </div>
             }
+
         </aside>
 
-        <!-- ── FEED ── -->
+        <!-- ══ FEED ══ -->
         <main>
-            <div class="feed-bar">
-                <div class="feed-count">
+            <div class="f-feed-bar">
+                <div class="f-feed-label">
                     Showing <strong>@Model.Posts.Count()</strong> of <strong>@Model.TotalCount</strong> posts
                 </div>
             </div>
 
             @if (!Model.Posts.Any())
             {
-                <div class="empty-state">
-                    <div class="empty-icon">🍽</div>
-                    <div class="empty-title">Nothing here yet</div>
-                    <div class="empty-sub">Be the first to start a discussion!</div>
+                <div class="f-empty">
+                    <span class="f-empty-icon">🍽</span>
+                    <div class="f-empty-title">Nothing here yet</div>
+                    <div class="f-empty-sub">Be the first to start a discussion!</div>
+                    <a asp-action="Create" class="f-btn-empty">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Start the conversation
+                    </a>
                 </div>
             }
             else
             {
-                <div class="post-list">
+                <div class="f-post-list">
                     @foreach (var post in Model.Posts)
                     {
-                        string upClass   = post.UserVote == 1  ? "voted" : "";
-                        string downClass = post.UserVote == -1 ? "voted" : "";
-                        string scoreClass = post.VoteScore > 0 ? "pos" : post.VoteScore < 0 ? "neg" : "";
+                        string upClass    = post.UserVote == 1  ? "voted" : "";
+                        string downClass  = post.UserVote == -1 ? "voted" : "";
+                        string scoreClass = post.VoteScore > 0  ? "pos"   : post.VoteScore < 0 ? "neg" : "";
 
-                        <article class="post-card" id="post-@post.Id">
-                            <div class="post-card-inner">
-                                <!-- Vote -->
-                                <div class="vote-col">
-                                    <button class="vote-btn up @upClass"
-                                            onclick="votePost(@post.Id, 1)">
-                                        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-                                    </button>
-                                    <span class="vote-score @scoreClass"
-                                          id="score-@post.Id">@post.VoteScore</span>
-                                    <button class="vote-btn down @downClass"
-                                            onclick="votePost(@post.Id, -1)">
-                                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-                                    </button>
+                        var avatarColors = new[] { "#c0513d","#2d6a4f","#b5550a","#1d4ed8","#6d28d9","#be185d","#0e7490" };
+                        string avatarBg  = avatarColors[Math.Abs(post.AuthorName.GetHashCode()) % avatarColors.Length];
+
+                        <article class="f-post-card" id="post-@post.Id"
+                                 onclick="window.location='@Url.Action("Details","Forum", new { id = post.Id })'">
+
+                            <!-- Vote -->
+                            <div class="f-vote-col">
+                                <button class="f-vote-btn up @upClass"
+                                        onclick="event.stopPropagation(); votePost(@post.Id, 1)"
+                                        title="Upvote">
+                                    <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+                                </button>
+                                <div class="f-vote-score-wrap">
+                                    <span class="f-vote-score @scoreClass" id="score-@post.Id">@post.VoteScore</span>
+                                    <span class="f-vote-label">votes</span>
+                                </div>
+                                <button class="f-vote-btn down @downClass"
+                                        onclick="event.stopPropagation(); votePost(@post.Id, -1)"
+                                        title="Downvote">
+                                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                                </button>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="f-post-body">
+                                <div class="f-post-author-row">
+                                    <div class="f-author-avatar" style="background:@avatarBg">
+                                        @(post.AuthorName.Length > 0 ? post.AuthorName[0].ToString().ToUpper() : "?")
+                                    </div>
+                                    <span class="f-author-name">@post.AuthorName</span>
+                                    <span class="f-author-sep"></span>
+                                    <span class="f-post-time">@TimeAgo(post.CreatedAt)</span>
+                                    @if (!string.IsNullOrEmpty(post.FlairName))
+                                    {
+                                        <span class="f-post-flair"
+                                              style="background:@(post.FlairColorHex + "22");color:@post.FlairColorHex">
+                                            @post.FlairName
+                                        </span>
+                                    }
                                 </div>
 
-                                <!-- Content -->
-                                <div class="post-body">
-                                    <div class="post-top">
-                                        <div class="post-avatar"
-                                             style="background:@(string.Join("", post.AuthorName.Take(1).Select(c => { var colors = new[]{"#e85d26","#2d7d46","#c17b1a","#2563eb","#7c3aed","#db2777","#0891b2"}; return colors[Math.Abs(post.AuthorName.GetHashCode()) % colors.Length]; })))">
-                                            @(post.AuthorName.Length > 0 ? post.AuthorName[0].ToString().ToUpper() : "?")
-                                        </div>
-                                        <span class="post-author">@post.AuthorName</span>
-                                        <span class="post-time">@TimeAgo(post.CreatedAt)</span>
-                                        @if (!string.IsNullOrEmpty(post.FlairName))
-                                        {
-                                            <span class="post-flair"
-                                                  style="background:@(post.FlairColorHex + "22");color:@post.FlairColorHex">
-                                                @post.FlairName
-                                            </span>
-                                        }
-                                    </div>
+                                <a class="f-post-title"
+                                   asp-action="Details" asp-route-id="@post.Id"
+                                   onclick="event.stopPropagation()">@post.Title</a>
 
-                                    <a class="post-title" asp-action="Details" asp-route-id="@post.Id">
-                                        @post.Title
+                                <p class="f-post-preview">@post.BodyPreview</p>
+
+                                @if (post.RecipeId.HasValue)
+                                {
+                                    <a class="f-recipe-tag"
+                                       asp-controller="Recipe" asp-action="Details"
+                                       asp-route-id="@post.RecipeId"
+                                       onclick="event.stopPropagation()">
+                                        🍴 @post.RecipeName
                                     </a>
+                                }
 
-                                    <p class="post-preview">@post.BodyPreview</p>
-
-                                    @if (post.RecipeId.HasValue)
-                                    {
-                                        <a class="post-recipe-tag"
-                                           asp-controller="Recipe" asp-action="Details" asp-route-id="@post.RecipeId">
-                                            🍴 @post.RecipeName
-                                        </a>
-                                    }
-
-                                    <div class="post-footer">
-                                        <a class="post-stat"
-                                           asp-action="Details" asp-route-id="@post.Id"
-                                           asp-fragment="comments">
-                                            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                            @post.CommentCount comments
-                                        </a>
-                                        <a class="post-stat" asp-action="Details" asp-route-id="@post.Id">
-                                            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                                            Read more
-                                        </a>
-                                    </div>
+                                <div class="f-post-footer">
+                                    <a class="f-post-action"
+                                       asp-action="Details" asp-route-id="@post.Id"
+                                       asp-fragment="comments"
+                                       onclick="event.stopPropagation()">
+                                        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                        @post.CommentCount @(post.CommentCount == 1 ? "comment" : "comments")
+                                    </a>
+                                    <span class="f-action-sep"></span>
+                                    <a class="f-post-action"
+                                       asp-action="Details" asp-route-id="@post.Id"
+                                       onclick="event.stopPropagation()">
+                                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                                        Read post
+                                    </a>
                                 </div>
                             </div>
                         </article>
@@ -543,25 +882,25 @@ body {
             @if (Model.TotalPages > 1)
             {
                 string PageUrl(int pg) => $"?sort={Model.Sort}&page={pg}&flairId={Model.FilterFlairId}";
-                <nav class="pagination-wrap">
+                <nav class="f-pagination" aria-label="Pagination">
                     @if (Model.CurrentPage > 1)
                     {
-                        <a class="page-link prev-next" href="@PageUrl(Model.CurrentPage - 1)">← Prev</a>
+                        <a class="f-page-link prev-next" href="@PageUrl(Model.CurrentPage - 1)">← Prev</a>
                     }
                     @for (int i = 1; i <= Model.TotalPages; i++)
                     {
                         if (i == 1 || i == Model.TotalPages || (i >= Model.CurrentPage - 2 && i <= Model.CurrentPage + 2))
                         {
-                            <a class="page-link @(i == Model.CurrentPage ? "active" : "")" href="@PageUrl(i)">@i</a>
+                            <a class="f-page-link @(i == Model.CurrentPage ? "active" : "")" href="@PageUrl(i)">@i</a>
                         }
                         else if (i == Model.CurrentPage - 3 || i == Model.CurrentPage + 3)
                         {
-                            <span class="page-ellipsis">···</span>
+                            <span class="f-page-ellipsis">···</span>
                         }
                     }
                     @if (Model.CurrentPage < Model.TotalPages)
                     {
-                        <a class="page-link prev-next" href="@PageUrl(Model.CurrentPage + 1)">Next →</a>
+                        <a class="f-page-link prev-next" href="@PageUrl(Model.CurrentPage + 1)">Next →</a>
                     }
                 </nav>
             }
@@ -572,7 +911,7 @@ body {
 <script>
 async function votePost(postId, value) {
     try {
-        const res  = await fetch('/Forum/Vote', {
+        const res = await fetch('/Forum/Vote', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `postId=${postId}&value=${value}&__RequestVerificationToken=${getToken()}`
@@ -582,14 +921,15 @@ async function votePost(postId, value) {
 
         const scoreEl = document.getElementById(`score-${postId}`);
         const card    = document.getElementById(`post-${postId}`);
+
         if (scoreEl) {
             scoreEl.textContent = data.newScore;
-            scoreEl.className   = 'vote-score' + (data.newScore > 0 ? ' pos' : data.newScore < 0 ? ' neg' : '');
+            scoreEl.className = 'f-vote-score' + (data.newScore > 0 ? ' pos' : data.newScore < 0 ? ' neg' : '');
         }
         if (card) {
-            card.querySelectorAll('.vote-btn').forEach(b => b.classList.remove('voted'));
-            if (data.userVote ===  1) card.querySelector('.vote-btn.up')?.classList.add('voted');
-            if (data.userVote === -1) card.querySelector('.vote-btn.down')?.classList.add('voted');
+            card.querySelectorAll('.f-vote-btn').forEach(b => b.classList.remove('voted'));
+            if (data.userVote ===  1) card.querySelector('.f-vote-btn.up')?.classList.add('voted');
+            if (data.userVote === -1) card.querySelector('.f-vote-btn.down')?.classList.add('voted');
         }
     } catch(e) { console.error(e); }
 }
