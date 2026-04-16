@@ -4,7 +4,7 @@ using RecipeFinder.Data;
 using RecipeFinder.Models;
 using RecipeFinder.Models.FourmModel;
 
-namespace RecipeFinder.Seeders;
+namespace RecipeFinder.Data;
 
 public static class ForumSeeder
 {

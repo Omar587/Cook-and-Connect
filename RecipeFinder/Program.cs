@@ -4,7 +4,7 @@ using RecipeFinder.Data;
 using RecipeFinder.Models;
 using RecipeFinder.Services;
 using RecipeFinder.Repository;
-using RecipeFinder.Seeders;
+using RecipeFinder.Data;
 using RecipeFinder.Services.Forum;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +60,7 @@ using (var scope = app.Services.CreateScope())
 {
     await ForumSeeder.SeedAsync(scope.ServiceProvider);
 }
+
 
 
 using (var scope = app.Services.CreateScope())
