@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RecipeFinder.Models;
-using RecipeFinder.DTOs;
+using RecipeFinder.ViewModels;
 
 namespace RecipeFinder.Controllers;
 
@@ -24,7 +24,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterDTO model)
+    public async Task<IActionResult> Register(RegisterViewModel model)
     {
         if (ModelState.IsValid)
         {
@@ -61,7 +61,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginDTO model)
+    public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (ModelState.IsValid)
         {

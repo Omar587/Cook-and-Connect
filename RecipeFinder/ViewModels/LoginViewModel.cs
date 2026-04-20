@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RecipeFinder.DTOs;
+namespace RecipeFinder.ViewModels;
 
-public class LoginDTO
+public class LoginViewModel
 {
     [Required]
     [EmailAddress]
