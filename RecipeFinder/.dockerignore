@@ -1,0 +1,20 @@
+# Build artifacts
+bin/
+obj/
+
+# Source Control
+.git/
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# OS/IDE files
+.vs/
+.vscode/
+*.user
+packages-microsoft-prod.deb
+
+# Configuration
+appsettings.Development.json
