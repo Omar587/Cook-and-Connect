@@ -5,7 +5,7 @@
 namespace RecipeFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class forum : Migration
+    public partial class AddIsAdminToCustomer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

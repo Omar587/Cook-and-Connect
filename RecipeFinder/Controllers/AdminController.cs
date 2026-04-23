@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,13 @@ public class AdminController : Controller
     private async Task<bool> IsAdminAsync()
     {
         var user = await _userManager.GetUserAsync(User);
+        Console.WriteLine(
+            JsonSerializer.Serialize(user, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            }));
+        
+        Console.WriteLine(user?.IsAdmin == true);
         return user?.IsAdmin == true;
     }
 

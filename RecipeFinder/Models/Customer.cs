@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace RecipeFinder.Models;
 
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +9,7 @@ public class Customer : IdentityUser<int>
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime CreatedAt { get; set; }
+    [Column("IsAdmin")]
     public bool IsAdmin { get; set; } = false;
     
     // Navigation properties

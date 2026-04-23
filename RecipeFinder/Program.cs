@@ -12,8 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Add this (PostgreSQL):
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+Console.WriteLine(connectionString);
 
 // Add Identity services
 builder.Services.AddIdentity<Customer, IdentityRole<int>>(options =>
