@@ -1,40 +1,61 @@
-using System.Net.Mail;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RecipeFinder.Data;
 using RecipeFinder.Models;
 using RecipeFinder.Services;
 using RecipeFinder.Repository;
-using RecipeFinder.Data;
 using RecipeFinder.Services.Forum;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//
+// ─────────────────────────────────────────────────────────────
+// DATABASE (LOCAL + RENDER SAFE)
+// ─────────────────────────────────────────────────────────────
+//
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-// Add this (PostgreSQL):
+string connString;
+
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':');
+
+    connString =
+        $"Host={uri.Host};" +
+        $"Port={uri.Port};" +
+        $"Username={userInfo[0]};" +
+        $"Password={userInfo[1]};" +
+        $"Database={uri.AbsolutePath.TrimStart('/')};" +
+        $"SSL Mode=Require;Trust Server Certificate=true;";
+}
+else
+{
+    connString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connString));
 
-
-
-// Add Identity services
+//
+// ─────────────────────────────────────────────────────────────
+// IDENTITY
+// ─────────────────────────────────────────────────────────────
+//
 builder.Services.AddIdentity<Customer, IdentityRole<int>>(options =>
 {
-    // Password settings
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
-    
-    // User settings
+
     options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// Configure cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -42,58 +63,51 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
-builder.Services.AddScoped<IForumPostService,    ForumPostService>();
+//
+// ─────────────────────────────────────────────────────────────
+// SERVICES
+// ─────────────────────────────────────────────────────────────
+//
+builder.Services.AddScoped<IForumPostService, ForumPostService>();
 builder.Services.AddScoped<IForumCommentService, ForumCommentService>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-
-//-- RECIPE SEEDER --------------------------
+//
+// ─────────────────────────────────────────────────────────────
+// DATABASE MIGRATION (SAFE)
+// ─────────────────────────────────────────────────────────────
+//
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await context.Database.MigrateAsync();
-    await RecipeSeeder.SeedRecipes(context);
+    context.Database.Migrate();
 }
 
-
-// ── Forum seeder ──────────────────────────────────────────────
+//
+// ─────────────────────────────────────────────────────────────
+// SEED DATA (RUN ON STARTUP)
+// ─────────────────────────────────────────────────────────────
+//
 using (var scope = app.Services.CreateScope())
 {
-    await ForumSeeder.SeedAsync(scope.ServiceProvider);
-}
-
-// Instruction seeder 
-
-// ── Forum seeder ──────────────────────────────────────────────
-using (var scope = app.Services.CreateScope())
-{
-    
     var services = scope.ServiceProvider;
-    RecipeSeeder recipeSeeder = new RecipeSeeder();
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var context = services.GetRequiredService<AppDbContext>();
+
+    await RecipeSeeder.SeedRecipes(context);
+    await ForumSeeder.SeedAsync(services);
+
+    var recipeSeeder = new RecipeSeeder();
     recipeSeeder.SeedInstructions(context);
 }
 
-
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    RecipeService recipeService = new RecipeService(context);
-    Console.WriteLine(recipeService.GetById(34).Name);
-    
-    
-    recipeService.TestIngridents();
-    
-  
-
-}
-
-
-// Configure the HTTP request pipeline.
+//
+// ─────────────────────────────────────────────────────────────
+// HTTP PIPELINE
+// ─────────────────────────────────────────────────────────────
+//
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -103,15 +117,14 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// Add these authentication/authorization middleware (IMPORTANT: order matters!)
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.Run();
