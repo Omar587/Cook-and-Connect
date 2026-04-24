@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using RecipeFinder.Data;
 using RecipeFinder.Models;
 using RecipeFinder.Services;
-using RecipeFinder.Repository;
 using RecipeFinder.Services.Forum;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,18 +76,18 @@ var app = builder.Build();
 
 //
 // ─────────────────────────────────────────────────────────────
-// DATABASE MIGRATION (SAFE)
+// DATABASE MIGRATION (RENDER SAFE)
 // ─────────────────────────────────────────────────────────────
 //
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
+    await context.Database.MigrateAsync();
 }
 
 //
 // ─────────────────────────────────────────────────────────────
-// SEED DATA (RUN ON STARTUP)
+// SEED DATA (SAFE + NON-BLOCKING)
 // ─────────────────────────────────────────────────────────────
 //
 using (var scope = app.Services.CreateScope())
@@ -96,11 +95,19 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
 
-    await RecipeSeeder.SeedRecipes(context);
-    await ForumSeeder.SeedAsync(services);
-
     var recipeSeeder = new RecipeSeeder();
-    recipeSeeder.SeedInstructions(context);
+
+    // Only seed if empty (prevents duplicate inserts on Render restarts)
+    if (!context.Recipes.Any())
+    {
+        await RecipeSeeder.SeedRecipes(context);
+        recipeSeeder.SeedInstructions(context);
+    }
+
+    if (!context.ForumPosts.Any())
+    {
+        await ForumSeeder.SeedAsync(services);
+    }
 }
 
 //
