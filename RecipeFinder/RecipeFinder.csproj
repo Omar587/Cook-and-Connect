@@ -25,5 +25,11 @@
     <ItemGroup>
         <Folder Include="wwwroot\images\" />
     </ItemGroup>
+    
+    <ItemGroup>
+  <None Update="Data\recipe_instructions.csv">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
 
 </Project>
