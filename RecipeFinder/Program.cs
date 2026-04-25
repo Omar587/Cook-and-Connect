@@ -8,9 +8,9 @@ using RecipeFinder.Services.Forum;
 var builder = WebApplication.CreateBuilder(args);
 
 //
-// ─────────────────────────────────────────────────────────────
-// DATABASE (LOCAL + RENDER SAFE)
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// DATABASE (LOCAL + RENDER SAFE FIXED)
+// ─────────────────────────────────────────────
 //
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
@@ -21,9 +21,12 @@ if (!string.IsNullOrEmpty(databaseUrl))
     var uri = new Uri(databaseUrl);
     var userInfo = uri.UserInfo.Split(':');
 
+    // FIX: prevent Port = -1 crash on Render
+    var port = uri.Port > 0 ? uri.Port : 5432;
+
     connString =
         $"Host={uri.Host};" +
-        $"Port={uri.Port};" +
+        $"Port={port};" +
         $"Username={userInfo[0]};" +
         $"Password={userInfo[1]};" +
         $"Database={uri.AbsolutePath.TrimStart('/')};" +
@@ -38,9 +41,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connString));
 
 //
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // IDENTITY
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 //
 builder.Services.AddIdentity<Customer, IdentityRole<int>>(options =>
 {
@@ -63,9 +66,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 //
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // SERVICES
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 //
 builder.Services.AddScoped<IForumPostService, ForumPostService>();
 builder.Services.AddScoped<IForumCommentService, ForumCommentService>();
@@ -75,9 +78,9 @@ builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 //
-// ─────────────────────────────────────────────────────────────
-// DATABASE MIGRATION (RENDER SAFE)
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// DATABASE MIGRATION
+// ─────────────────────────────────────────────
 //
 using (var scope = app.Services.CreateScope())
 {
@@ -86,9 +89,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 //
-// ─────────────────────────────────────────────────────────────
-// SEED DATA (SAFE + NON-BLOCKING)
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// SEED DATA (SAFE GUARDS)
+// ─────────────────────────────────────────────
 //
 using (var scope = app.Services.CreateScope())
 {
@@ -97,7 +100,6 @@ using (var scope = app.Services.CreateScope())
 
     var recipeSeeder = new RecipeSeeder();
 
-    // Only seed if empty (prevents duplicate inserts on Render restarts)
     if (!context.Recipes.Any())
     {
         await RecipeSeeder.SeedRecipes(context);
@@ -111,9 +113,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 //
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // HTTP PIPELINE
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 //
 if (!app.Environment.IsDevelopment())
 {
