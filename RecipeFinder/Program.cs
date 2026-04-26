@@ -112,6 +112,20 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+
+    var recipeSeeder = new RecipeSeeder();
+
+  
+    await RecipeSeeder.SeedRecipes(context);
+    recipeSeeder.SeedInstructions(context);
+
+   
+}
+
 //
 // ─────────────────────────────────────────────
 // HTTP PIPELINE
