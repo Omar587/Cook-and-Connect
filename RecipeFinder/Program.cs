@@ -88,9 +88,9 @@ using (var scope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
 }
 
-//
+/*
 // ─────────────────────────────────────────────
-// SEED DATA (SAFE GUARDS)
+// SEED DATA (SAFE GUARDS) REMOVED SEEDER NOT NEEDED ATM
 // ─────────────────────────────────────────────
 //
 using (var scope = app.Services.CreateScope())
@@ -112,17 +112,8 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
+**/
 
-    var recipeSeeder = new RecipeSeeder();
-    
-    recipeSeeder.SeedInstructions(context);
-
-   
-}
 
 //
 // ─────────────────────────────────────────────
