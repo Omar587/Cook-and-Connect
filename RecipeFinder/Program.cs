@@ -112,6 +112,45 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// SEED DATA (SAFE GUARDS + ONE-TIME ADMIN SET)
+// ─────────────────────────────────────────────
+//
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    var userManager = services.GetRequiredService<UserManager<Customer>>();
+
+    var recipeSeeder = new RecipeSeeder();
+
+    // Seed recipes only if empty
+    if (!context.Recipes.Any())
+    {
+        await RecipeSeeder.SeedRecipes(context);
+        recipeSeeder.SeedInstructions(context);
+    }
+
+    // Seed forum only if empty
+    if (!context.ForumPosts.Any())
+    {
+        await ForumSeeder.SeedAsync(services);
+    }
+
+    // ─────────────────────────────
+    // ONE-TIME ADMIN PROMOTION
+    // ─────────────────────────────
+    var email = "omvr32@gmail.com";
+
+    var user = await userManager.Users
+        .FirstOrDefaultAsync(u => u.Email == email);
+
+    if (user != null && !user.IsAdmin)
+    {
+        user.IsAdmin = true;
+        await userManager.UpdateAsync(user);
+    }
+}
+
 //
 // ─────────────────────────────────────────────
 // HTTP PIPELINE
