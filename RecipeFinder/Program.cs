@@ -118,9 +118,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<AppDbContext>();
 
     var recipeSeeder = new RecipeSeeder();
-
-  
-    await RecipeSeeder.SeedRecipes(context);
+    
     recipeSeeder.SeedInstructions(context);
 
    
