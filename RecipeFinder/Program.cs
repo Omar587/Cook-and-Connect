@@ -88,7 +88,7 @@ using (var scope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
 }
 
-/*
+
 // ─────────────────────────────────────────────
 // SEED DATA (SAFE GUARDS) REMOVED SEEDER NOT NEEDED ATM
 // ─────────────────────────────────────────────
@@ -112,7 +112,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-**/
+
 
 
 //
